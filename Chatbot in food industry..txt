@@ -1,0 +1,60 @@
+import random
+import string
+
+
+responses = {
+    "hi": "Hello! Type 'menu' to see the menu.",
+    "menu": "Here is our menu:\n1. Pizza - 120rs\n2. Tea - 12rs\n3. Biryani - 220rs\n4. Pulav - 90rs\nType 'order' to place an order\n---Type 'confirm' to confirm the order.",
+    "order": "Please enter the number corresponding to the item you want to order:",
+    "confirm": "Your order of {} has been placed. Your total is Rs {}.\nYour order ID is {}.\nThank you for choosing us. Have a nice day!",
+    "ok": "Thank you for using our food ordering system. Your order is on the way....!",
+    "default": "Sorry, I have limited amount of data."
+}
+
+menu = {
+    "1": {"name": "Pizza", "price": 120},
+    "2": {"name": "tea", "price": 12},
+    "3": {"name": "Biryani", "price": 220},
+    "4": {"name": "Pulav", "price": 90}
+}
+
+def generate_order_id():
+    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+
+
+def food_ordering_system():
+    print("Welcome to our food ordering system. Type 'hi' to start.")
+    total_price = 0
+    order_items = []
+
+    while True:
+        user_input = input("You: ").lower()
+
+        if user_input == 'ok':
+            print("Chatbot:", responses["ok"])
+            break
+        elif user_input == 'hi':
+            print("Chatbot:", responses["hi"])
+        elif user_input == 'menu':
+            print("Chatbot:", responses["menu"])
+        elif user_input == 'order':
+            print("Chatbot:", responses["order"])
+        elif user_input in menu.keys():
+            item = menu[user_input]["name"]
+            price = menu[user_input]["price"]
+            total_price += price
+            order_items.append(item)
+            print(f"Chatbot: Added {item} to your order. Current total: Rs {total_price}")
+        elif user_input == 'confirm':
+            if order_items:
+                order_id = generate_order_id()
+                print("Chatbot:", responses["confirm"].format(', '.join(order_items), total_price, order_id))
+                total_price = 0
+                order_items = []
+            else:
+                print("Chatbot: Please order something before confirming.")
+        else:
+            print("Chatbot:", responses["default"])
+
+if __name__ == "__main__":
+    food_ordering_system()
